@@ -1,7 +1,14 @@
 #!/bin/bash
 
-#resize disk from 20GB to 50GB
-growpart /dev/nvme0n1 4
+yum install -y cloud-utils-growpart lvm2
+
+sleep 10   # wait for disk to be ready
+
+# resize disk
+growpart /dev/nvme0n1 4 # resize partition 4 to use the new space
+
+
+pvresize /dev/nvme0n1p4 # resize physical volume to use the new space
 
 lvextend -L +10G /dev/mapper/RootVG-homeVol
 lvextend -L +10G /dev/mapper/RootVG-varVol
@@ -11,19 +18,20 @@ xfs_growfs /home
 xfs_growfs /var/tmp
 xfs_growfs /var
 
-yum install java-17-openjdk -y
-yum install -y yum-utils
+yum install -y java-17-openjdk yum-utils zip
+
+# Terraform
 yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-yum -y install terraform
+yum install -y terraform
+
+# NodeJS
 dnf module disable nodejs -y
 dnf module enable nodejs:20 -y
-dnf install nodejs -y
-yum install zip -y
+dnf install -y nodejs
 
-# docker
-yum install -y yum-utils
+# Docker
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 systemctl start docker
 systemctl enable docker
 usermod -aG docker ec2-user
@@ -33,8 +41,8 @@ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scrip
 chmod 700 get_helm.sh
 ./get_helm.sh
 
-# Maven for Java projects
-dnf install maven -y
+# Maven
+dnf install -y maven
 
-# Python for python projects
-dnf install python3.11 gcc python3-devel -y
+# Python
+dnf install -y python3.11 gcc python3-devel
