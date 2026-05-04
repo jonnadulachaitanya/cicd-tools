@@ -7,7 +7,7 @@ module "jenkins" {
   vpc_security_group_ids = ["sg-00625b65af682140f"]   #replace your SG
   subnet_id              = "subnet-0a7be4809f9a1b2d1" #replace your Subnet
   ami                    = data.aws_ami.ami_info.id
-  user_data              = file("jenkins.sh")
+  user_data              = file("jenkins-master.sh")
   tags = {
     Name = "jenkins"
   }
