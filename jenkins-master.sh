@@ -30,22 +30,18 @@ echo "==== DISK RESIZE DONE ===="
 # -------------------------------
 # Java (install separately)
 # -------------------------------
-yum install -y java-17-openjdk
 
-# -------------------------------
-# Jenkins (safe install)
-# -------------------------------
-curl -o /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo curl -L -o /etc/yum.repos.d/jenkins.repo \
+https://pkg.jenkins.io/rpm-stable/jenkins.repo
 
-# Fix repo for RHEL9
-sed -i 's/$releasever/9/g' /etc/yum.repos.d/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/rpm-stable/jenkins.io-2023.key
 
-yum clean all
-yum install -y jenkins || echo "Jenkins install failed, continuing..."
+sudo dnf install -y fontconfig java-21-openjdk
 
-systemctl daemon-reload
-systemctl enable jenkins
-systemctl start jenkins
+sudo dnf install -y jenkins
+
+sudo systemctl daemon-reload
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
 
 echo "==== MASTER SETUP COMPLETED ===="

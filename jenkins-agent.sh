@@ -30,7 +30,7 @@ echo "==== DISK RESIZE DONE ===="
 # -------------------------------
 # Java
 # -------------------------------
-yum install -y java-17-openjdk
+sudo dnf install -y fontconfig java-21-openjdk
 
 # -------------------------------
 # Terraform
